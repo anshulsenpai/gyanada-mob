@@ -1,20 +1,30 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+// import { Provider, useSelector } from "react-redux"; // Import Provider and useSelector here
+// import { persistor, store } from "./redux/store";
+// import { PersistGate } from "redux-persist/integration/react";
+import LoginScreen from "./screens/LoginScreen";
+import HomeScreen from "./screens/HomeScreen";
+import ForgotPasswordScreen from "./screens/ForgotPasswordScreen";
 
-export default function App() {
+const Stack = createStackNavigator();
+
+const App = () => {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    // <Provider store={store}>
+    //   <PersistGate loading={null} persistor={persistor}>
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Login">
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Forgot Password" component={ForgotPasswordScreen} />
+        {/* Add more screens if necessary */}
+      </Stack.Navigator>
+    </NavigationContainer>
+    //   </PersistGate>
+    // </Provider>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
