@@ -7,28 +7,40 @@ import {
   StyleSheet,
 } from "react-native";
 
-const ForgotPasswordScreen = ({ navigation }) => {
-  const [email, setEmail] = useState("");
+const ResetPasswordScreen = () => {
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleResetPassword = () => {
-    navigation.navigate("Reset Password")
-    console.log("Reset password clicked for email:", email);
+    // Add your logic to handle password reset here
+    console.log("Reset password clicked for email:", {
+      password,
+      confirmPassword,
+    });
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Forgot Password</Text>
-      <Text style={styles.desc}>Enter the registered email address</Text>
+      <Text style={styles.title}>Reset Password</Text>
+      <Text style={styles.desc}>Enter the new password</Text>
       <TextInput
-        placeholder="Enter your email"
-        value={email}
-        onChangeText={setEmail}
+        placeholder="New Password"
+        value={password}
+        onChangeText={setPassword}
         style={styles.input}
         autoCapitalize="none"
-        keyboardType="email-address"
+        keyboardType="password"
+      />
+      <TextInput
+        placeholder="Confirm Password"
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
+        style={styles.input}
+        autoCapitalize="none"
+        keyboardType="confirm-password"
       />
       <TouchableOpacity style={styles.button} onPress={handleResetPassword}>
-        <Text style={styles.buttonText}>Proceed</Text>
+        <Text style={styles.buttonText}>Reset Password</Text>
       </TouchableOpacity>
     </View>
   );
@@ -75,4 +87,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ForgotPasswordScreen;
+export default ResetPasswordScreen;

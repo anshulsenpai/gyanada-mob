@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   TextInput,
@@ -7,34 +7,52 @@ import {
   TouchableOpacity,
   Text,
   Image,
+  ActivityIndicator,
 } from "react-native";
 import icon from "../assets/logo.png"; // Import your company logo image here
-
+import { useAuth } from "../authContext";
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [checkRequired, setCheckRequired] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // Add isLoading state
 
+  const { dispatch } = useAuth();
   const handleLogin = async () => {
-    console.log("Clicked Login button");
     try {
       if (!email || !password) {
         console.log("Login details not provided");
+        setCheckRequired(true);
       } else {
+        setIsLoading(true);
         const res = await axios.post("http://10.0.2.2:8082/api/web/login", {
           email,
           password,
         });
-        console.log(res);
-        navigation.navigate("Home");
+
+        if (res.data.success) {
+          const { token } = res.data.data;
+          dispatch({ type: "LOGIN", payload: token });
+          // console.log(res);
+          navigation.navigate("Home");
+        } else {
+          console.log("something went wrong");
+        }
       }
     } catch (error) {
-      console.log(error.message);
+      console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleForgotPassword = () => {
     navigation.navigate("Forgot Password");
   };
+
+  useEffect(() => {
+    setCheckRequired(false);
+  }, [email, password]);
 
   return (
     <View style={styles.container}>
@@ -48,7 +66,7 @@ const LoginScreen = ({ navigation }) => {
         placeholder="Email"
         value={email}
         onChangeText={setEmail}
-        style={styles.input}
+        style={{ ...styles.input, borderColor: checkRequired ? "red" : "#ccc" }}
         autoCapitalize="none"
       />
       <TextInput
@@ -56,12 +74,18 @@ const LoginScreen = ({ navigation }) => {
         secureTextEntry
         value={password}
         onChangeText={setPassword}
-        style={styles.input}
+        style={{ ...styles.input, borderColor: checkRequired ? "red" : "#ccc" }}
         autoCapitalize="none"
       />
-      {(!email || !password) && <Text style={styles.errorText}>All the fields are required!</Text>}
+      {checkRequired && (
+        <Text style={styles.errorText}>All the fields are required!</Text>
+      )}
       <TouchableOpacity style={styles.buttonContainer} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Login as Agent</Text>
+        {isLoading ? (
+          <ActivityIndicator color="white" />
+        ) : (
+          <Text style={styles.buttonText}>Login as Agent</Text>
+        )}
       </TouchableOpacity>
       <TouchableOpacity onPress={handleForgotPassword}>
         <Text style={styles.forgotPasswordLink}>Forgot Password?</Text>
@@ -75,11 +99,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-start",
     alignItems: "center",
-    padding: 20,
+    padding: 15,
     backgroundColor: "#fff",
   },
   logoContainer: {
     alignItems: "center",
+    marginTop: 50
   },
   titleText: {
     width: "80%",
@@ -91,7 +116,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     color: "red",
-    marginBottom: 10
+    marginBottom: 10,
   },
   logo: {
     width: 200,
