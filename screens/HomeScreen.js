@@ -1,30 +1,15 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { View, StyleSheet } from "react-native";
+import WebView from "react-native-webview";
 
-const HomeScreen = ({ navigation }) => {
-  return (
-    <View style={styles.container}>
-      <Text>Home</Text>
-    </View>
-  );
+const HomeScreen = () => {
+  return <WebView source={{ uri: "http://192.168.160.134:5173/native-form" }} />;
 };
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     padding: 15,
-  },
-  buttonContainer: {
-    backgroundColor: "#16B596",
-    width: "100%",
-    padding: 15,
-    borderRadius: 10,
-    marginVertical: 20,
-  },
-  buttonText: {
-    color: "white",
-    textAlign: "center",
-    fontSize: 16,
-    fontWeight: "bold",
   },
 });
 
