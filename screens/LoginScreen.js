@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import icon from "../assets/logo.png"; // Import your company logo image here
 import { useAuth } from "../authContext";
+import { BASE_IP } from "../App";
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,7 +26,7 @@ const LoginScreen = ({ navigation }) => {
         setCheckRequired(true);
       } else {
         setIsLoading(true);
-        const res = await axios.post("http://10.0.2.2:8082/api/web/login", {
+        const res = await axios.post(`${BASE_IP}:8082/api/web/login`, {
           email,
           password,
         });
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     alignItems: "center",
-    marginTop: 50
+    marginTop: 50,
   },
   titleText: {
     width: "80%",

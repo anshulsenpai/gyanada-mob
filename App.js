@@ -13,6 +13,8 @@ import ResetPasswordScreen from "./screens/ResetPasswordScreen";
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
+export const BASE_IP = process.env.BASE_IP || "http://192.168.160.134";
+
 const MainNavigator = () => {
   return (
     <Tab.Navigator>

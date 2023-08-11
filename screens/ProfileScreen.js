@@ -1,31 +1,61 @@
-import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import React, { useEffect, useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+} from "react-native";
 import { useAuth } from "../authContext";
+import axios from "axios";
+import { BASE_IP } from "../App";
 
 const ProfileScreen = ({ navigation }) => {
-  const { dispatch } = useAuth();
+  const [user, setUser] = useState();
+  const { state, dispatch } = useAuth();
+  const { token } = state;
   const handleLogout = () => {
     dispatch({ type: "LOGOUT" });
     navigation.navigate("Home");
   };
 
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const res = await axios.get(`${BASE_IP}:8082/api/web/my-profile`, {
+          headers: {
+            Authorization: token,
+          },
+        });
+        setUser(res.data.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getUser();
+  }, []);
+  // console.log(user);
   return (
     <View style={styles.container}>
       <View style={styles.profileImageContainer}>
         <Image
-          source={require("../assets/icon.png")} // Replace with actual image source
+          source={{ uri: `http://10.0.2.2:8082/uploads/${user?.photo}` }} // Replace with actual image source
           style={styles.profileImage}
         />
       </View>
-      <View style={styles.profileInfo}>
-        <Text style={styles.name}>John Doe</Text>
+      <ScrollView style={styles.scrollView}>
+        {/* this must be scrollabel */}
+        <Text style={styles.name}>{user?.fullname}</Text>
         <Text style={styles.infoTextTitle}>Email</Text>
-        <Text style={styles.infoText}>john.doe@example.com</Text>
+        <Text style={styles.infoText}>{user?.email}</Text>
         <Text style={styles.infoTextTitle}>Phone</Text>
-        <Text style={styles.infoText}>+123 456 7890</Text>
+        <Text style={styles.infoText}>{user?.mobile}</Text>
+        <Text style={styles.infoTextTitle}>Address</Text>
+        <Text style={styles.infoText}>{user?.address}</Text>
         <Text style={styles.infoTextTitle}>Role</Text>
-        <Text style={styles.infoText}>Agent</Text>
-      </View>
+        <Text style={styles.infoText}>{user?.role}</Text>
+      </ScrollView>
       <TouchableOpacity style={styles.buttonContainer} onPress={handleLogout}>
         <Text style={styles.buttonText}>Logout</Text>
       </TouchableOpacity>
@@ -38,7 +68,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 15,
     alignItems: "center",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   profileImageContainer: {
     alignItems: "center",
@@ -75,7 +105,7 @@ const styles = StyleSheet.create({
     padding: 15,
     borderColor: "#ddd",
     borderRadius: 10,
-    borderWidth: 1
+    borderWidth: 1,
   },
   buttonContainer: {
     backgroundColor: "#16B596",
@@ -89,6 +119,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  scrollView: {
+    flex: 1,
+    width: "100%",
   },
 });
 
