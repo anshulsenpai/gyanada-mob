@@ -3,7 +3,7 @@ import * as SecureStore from "expo-secure-store";
 
 const AuthContext = createContext();
 
-const initalState = { token: null };
+const initalState = { token: null, user: null };
 
 const authReducer = (state, action) => {
   switch (action.type) {
@@ -19,6 +19,12 @@ const authReducer = (state, action) => {
       return {
         ...state,
         token: null,
+      };
+    case "SAVE_USER":
+      SecureStore.setItemAsync("user", JSON.stringify(action.payload));
+      return {
+        ...state,
+        user: action.payload,
       };
     default:
       return state;

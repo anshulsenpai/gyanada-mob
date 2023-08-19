@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   buttonText: {
-    color: "white",
+    color: "#1F202B",
     textAlign: "center",
     fontSize: 16,
     fontWeight: "bold",

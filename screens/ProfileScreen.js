@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   View,
   Text,
@@ -8,34 +8,16 @@ import {
   ScrollView,
 } from "react-native";
 import { useAuth } from "../authContext";
-import axios from "axios";
-import { BASE_IP } from "../App";
 
 const ProfileScreen = ({ navigation }) => {
-  const [user, setUser] = useState();
   const { state, dispatch } = useAuth();
-  const { token } = state;
+  const { user } = state;
+
   const handleLogout = () => {
     dispatch({ type: "LOGOUT" });
     navigation.navigate("Home");
   };
 
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        const res = await axios.get(`${BASE_IP}:8082/api/web/my-profile`, {
-          headers: {
-            Authorization: token,
-          },
-        });
-        setUser(res.data.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getUser();
-  }, []);
-  // console.log(user);
   return (
     <View style={styles.container}>
       <View style={styles.profileImageContainer}>
@@ -108,7 +90,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   buttonContainer: {
-    backgroundColor: "#16B596",
+    backgroundColor: "#BB2525",
     width: "100%",
     padding: 15,
     borderRadius: 10,
