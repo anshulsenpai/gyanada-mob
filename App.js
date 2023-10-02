@@ -5,25 +5,21 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import LoginScreen from "./screens/LoginScreen";
 import HomeScreen from "./screens/HomeScreen";
 import ForgotPasswordScreen from "./screens/ForgotPasswordScreen";
-import { AuthProvider, useAuth } from "./authContext"; // Import the AuthProvider
+import { AuthProvider, useAuth } from "./authContext";
 import ProfileScreen from "./screens/ProfileScreen";
-import { Ionicons, FontAwesome, Octicons } from "@expo/vector-icons";
+import { Ionicons, Octicons } from "@expo/vector-icons";
 import ResetPasswordScreen from "./screens/ResetPasswordScreen";
 import StudentForm from "./screens/StudentForm";
 import HistoryScreen from "./screens/HistoryScreen";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
-import { View } from "react-native";
 import SettingScreen from "./screens/SettingScreen";
-// FFBB4F -> Highlighted
-// 8ACAC0 -> Button primary
-// 1F202B -> TEXT primary
-// D0D0D2 -> TEXT secondary
+import StudentDetailPage from "./screens/StudentDetailsScreen";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-export const BASE_IP = "http://192.168.160.134";
+export const BASE_IP = "http://13.232.230.93";
 
 const MainNavigator = () => {
   return (
@@ -33,7 +29,7 @@ const MainNavigator = () => {
         tabBarStyle: {
           justifyContent: "space-between",
           alignItems: "center",
-          height: 65,
+          height: 60,
           backgroundColor: "#FFF",
         },
       }}
@@ -46,20 +42,6 @@ const MainNavigator = () => {
           tabBarIcon: ({ size, focused }) => (
             <Ionicons
               name="ios-home"
-              size={size}
-              color={focused ? "#000" : "#C1C1C1"}
-            />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Search"
-        component={HistoryScreen}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ size, focused }) => (
-            <FontAwesome
-              name="search"
               size={size}
               color={focused ? "#000" : "#C1C1C1"}
             />
@@ -104,7 +86,7 @@ const MainNavigator = () => {
           headerShown: false,
           tabBarIcon: ({ size, focused }) => (
             <Ionicons
-              name="settings-outline"
+              name="settings"
               size={size}
               color={focused ? "#000" : "#C1C1C1"}
             />
@@ -123,7 +105,7 @@ const RootApp = () => {
   const [fontsLoaded] = useFonts({
     poppins: require("./assets/fonts/Poppins-Regular.ttf"),
     poppins_semibold: require("./assets/fonts/Poppins-SemiBold.ttf"),
-    poppins_bold: require("./assets/fonts/Poppins-Bold.ttf")
+    poppins_bold: require("./assets/fonts/Poppins-Bold.ttf"),
   });
 
   const onLayoutRootView = useCallback(async () => {
@@ -148,6 +130,7 @@ const RootApp = () => {
         <Stack.Screen name="Reset Password" component={ResetPasswordScreen} />
         <Stack.Screen name="Student Form" component={StudentForm} />
         <Stack.Screen name="Profile" component={ProfileScreen} />
+        <Stack.Screen name="StudentDetailPage" component={StudentDetailPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );

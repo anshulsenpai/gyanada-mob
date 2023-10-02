@@ -12,11 +12,18 @@ import {
 import icon from "../assets/logo.png"; // Import your company logo image here
 import { useAuth } from "../authContext";
 import { BASE_IP } from "../App";
+import { BASE_API_URL } from "../consts/urls";
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [checkRequired, setCheckRequired] = useState(false);
   const [isLoading, setIsLoading] = useState(false); // Add isLoading state
+
+  const [status, setStatus] = useState({
+    _LOADING: false,
+    _ERROR: false,
+    _SUCCESS: false,
+  });
 
   const { dispatch } = useAuth();
   const handleLogin = async () => {
@@ -26,7 +33,7 @@ const LoginScreen = ({ navigation }) => {
         setCheckRequired(true);
       } else {
         setIsLoading(true);
-        const res = await axios.post(`${BASE_IP}:8082/api/web/login`, {
+        const res = await axios.post(`${BASE_API_URL}/api/web/login`, {
           email,
           password,
         });
@@ -42,6 +49,7 @@ const LoginScreen = ({ navigation }) => {
       }
     } catch (error) {
       console.log(error);
+      setStatus({...status, _ERROR: true, _SUCCESS: false, _LOADING: false})
     } finally {
       setIsLoading(false);
     }
@@ -81,11 +89,15 @@ const LoginScreen = ({ navigation }) => {
       {checkRequired && (
         <Text style={styles.errorText}>All the fields are required!</Text>
       )}
+
+      {
+        setStatus && <Text style={styles.errorText}>Email or Password is incorrect</Text>
+      }
       <TouchableOpacity style={styles.buttonContainer} onPress={handleLogin}>
         {isLoading ? (
           <ActivityIndicator color="white" />
         ) : (
-          <Text style={styles.buttonText}>Login as Agent</Text>
+          <Text style={styles.buttonText}>Login</Text>
         )}
       </TouchableOpacity>
       <TouchableOpacity onPress={handleForgotPassword}>

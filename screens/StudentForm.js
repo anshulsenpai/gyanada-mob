@@ -1,47 +1,43 @@
 import React, { useState } from "react";
-import {
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  Text,
-  SafeAreaView,
-  ActivityIndicator,
-  StatusBar,
-} from "react-native";
 import WebView from "react-native-webview";
-import Icon from "react-native-vector-icons/Ionicons";
 import { useAuth } from "../authContext";
+import { FontAwesome5 } from "@expo/vector-icons";
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+// import { BASE_IP } from "../App";
+import { FORM_URL } from "../consts/urls";
 
 const StudentForm = ({ navigation }) => {
   const { state } = useAuth();
   const { token } = state;
 
-  const [isLoading, setIsLoading] = useState(true);
-
-  const handleBackButton = () => {
+  const handleBack = () => {
     navigation.goBack();
-  };
-
-  const handleWebViewLoad = () => {
-    setIsLoading(false);
   };
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar
-        backgroundColor={styles.header.backgroundColor}
-        barStyle="light-content"
-      />
       <View style={styles.header}>
-        <TouchableOpacity onPress={handleBackButton} style={styles.backButton}>
-          <Icon name="arrow-back" size={25} color="#fff" />
+        <TouchableOpacity
+          onPress={handleBack}
+          style={{ marginRight: 15, marginBottom: 3 }}
+        >
+          <FontAwesome5
+            name="arrow-left"
+            size={22}
+            color={styles.headerText.color}
+          />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>Add Student</Text>
+        <Text style={styles.headerText}>Add Student</Text>
       </View>
-
       <WebView
         source={{
-          uri: `http://192.168.160.134:5173/native-form/?token=${token}`,
+          uri: `${FORM_URL}/native-form/?token=${token}`,
         }}
       />
     </SafeAreaView>
@@ -51,35 +47,24 @@ const StudentForm = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    marginTop: 0,
+    backgroundColor: "#FFF",
   },
   header: {
-    height: 70,
+    height: 75,
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 10,
-    backgroundColor: "#0A0944",
+    justifyContent: "flex-start",
+    padding: 15,
+    backgroundColor: "#FFF",
   },
-  headerTitle: {
-    flex: 1,
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#fff", // Set text color to match status bar content
-  },
-  backButton: {
-    padding: 10,
-    borderRadius: 5,
-    marginLeft: 5,
-  },
-  webView: {
-    flex: 1,
-  },
-  activityIndicator: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+  headerText: {
+    fontSize: 22,
+    fontFamily: "poppins_semibold",
+    color: "#191825",
+    textTransform: "capitalize",
+    textShadowColor: "rgba(0, 0, 0, 0.10)",
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 20,
   },
 });
 
