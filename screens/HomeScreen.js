@@ -6,14 +6,11 @@ import {
   StatusBar,
   TouchableOpacity,
   Image,
-  FlatList,
   ScrollView,
 } from "react-native";
-import { BASE_IP } from "../App";
 import { useAuth } from "../authContext";
 import axios from "axios";
-import { Feather, Ionicons } from "@expo/vector-icons";
-import { studentList } from "../studentList";
+import { Ionicons } from "@expo/vector-icons";
 import StudentListItem from "../components/StudentListItem";
 import { BASE_API_URL } from "../consts/urls";
 
@@ -22,6 +19,7 @@ const HomeScreen = ({ navigation }) => {
   const { token, user } = state;
 
   const [recentStudents, setRecentStudents] = useState([]);
+  const [studentsCount, setStudentsCount] = useState(0);
   const [data, setData] = useState({});
 
   useEffect(() => {
@@ -80,12 +78,31 @@ const HomeScreen = ({ navigation }) => {
           }
         );
         setRecentStudents(response.data.data.students);
-        setData(response.data.data)
+        setData(response.data.data);
       } catch (error) {
         console.log(error);
       }
     };
     getRecentStudents();
+  }, []);
+
+  useEffect(() => {
+    getAllstudentsCount = async () => {
+      try {
+        const response = await axios.get(
+          `${BASE_API_URL}/api/web/user/student?search=&selectedFilter=&filterValue=&page=&limit=`,
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
+        setStudentsCount(response.data.data.totalCount);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getAllstudentsCount();
   }, []);
 
   const handleProfile = () => {
@@ -99,7 +116,6 @@ const HomeScreen = ({ navigation }) => {
   const handleShowAll = () => {
     navigation.navigate("History");
   };
-
 
   return (
     <View style={styles.container}>
@@ -126,7 +142,7 @@ const HomeScreen = ({ navigation }) => {
           </View>
           <View style={styles.stat}>
             <Text style={styles.statTitle}>Total Students Added</Text>
-            <Text style={styles.statValue}>{data.totalCount}</Text>
+            <Text style={styles.statValue}>{studentsCount}</Text>
           </View>
           <View style={styles.stat}>
             <TouchableOpacity

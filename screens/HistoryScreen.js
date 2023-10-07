@@ -8,7 +8,6 @@ import {
   View,
 } from "react-native";
 import StudentListItem from "../components/StudentListItem";
-import { studentList } from "../studentList";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { BASE_API_URL } from "../consts/urls";
@@ -31,7 +30,7 @@ const HistoryScreen = ({ navigation }) => {
     const getStudentHistory = async () => {
       try {
         const response = await axios.get(
-          `${BASE_API_URL}/api/web/user/student/history?page=${currentPage}&limit=10`,
+          `${BASE_API_URL}/api/web/user/student?search=&selectedFilter=&filterValue=&page=${currentPage}&limit=10`,
           {
             headers: {
               Authorization: token,

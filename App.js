@@ -19,7 +19,7 @@ import StudentDetailPage from "./screens/StudentDetailsScreen";
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
-export const BASE_IP = "http://13.232.230.93";
+// export const BASE_IP = "http://13.232.230.93";
 
 const MainNavigator = () => {
   return (
